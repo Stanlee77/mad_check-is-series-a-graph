@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "node dist/programistyczne-3_zadanie-3.js",
+    "build": "npx ts",
+    "current": "npm run build && npm run start"
+  },
+  "devDependencies": {
+    "ts": "^0.2.2",
+    "typescript": "^5.3.3"
+  }
+}
