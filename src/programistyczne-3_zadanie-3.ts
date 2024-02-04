@@ -1,176 +1,12 @@
 import { CheckIsGraphParams, CheckIsGraphResult, IsGraph, Matrix, N, Sequence, Test } from "./programistyczne-3_zadanie-3.types";
+import { TESTS } from "./tests";
+import { FIRST_LETTER, ALPHABET } from "./utils";
+import readline from 'readline';
 
-const TESTS: Test[] = [
-    {
-        input: {
-            n: 3,
-            sequence: [2, 2, 2],
-        },
-        expectedResult: { isGraph: true, graph: [[0, 1, 1], [1, 0, 1], [1, 1, 0]] },
-    },
-    {
-        input: {
-            n: 2, // n < sequence.length
-            sequence: [2, 2, 2],
-        },
-        expectedResult: { isGraph: false },
-    },
-    {
-        input: {
-            n: 4,
-            sequence: [2, 2, 2],
-        },
-        expectedResult: { isGraph: true, graph: [[0, 0, 0, 0], [0, 0, 1, 1], [0, 1, 0, 1], [0, 1, 1, 0]] }, // one vertex without edges
-    },
-    {
-        input: {
-            n: 4,
-            sequence: [3, 2, 2, 1],
-        },
-        expectedResult: { isGraph: true, graph: [[0, 1, 1, 1], [1, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 0]] },
-    },
-    {
-        input: {
-            n: 6,
-            sequence: [5, 2, 3, 2, 1, 1],
-        },
-        expectedResult: {
-            isGraph: true,
-            graph: [
-                [0, 1, 1, 1, 1, 1],
-                [1, 0, 1, 1, 0, 0],
-                [1, 1, 0, 0, 0, 0],
-                [1, 1, 0, 0, 0, 0],
-                [1, 0, 0, 0, 0, 0],
-                [1, 0, 0, 0, 0, 0]
-            ]
-        },
-    },
-    {
-        input: {
-            n: 9,
-            sequence: [5, 5, 4, 4, 3, 3, 3, 3, 1], // a)
-        },
-        expectedResult: { isGraph: false }, // too many 2n + 1 level degrees
-    },
-    {
-        input: {
-            n: 10,
-            sequence: [6, 6, 6, 5, 5, 4, 4, 3, 2, 1], // b)
-        },
-        expectedResult: {
-            isGraph: true, graph: [
-                [
-                    0, 1, 1, 1, 1,
-                    1, 1, 0, 0, 0
-                ],
-                [
-                    1, 0, 1, 1, 1,
-                    1, 1, 0, 0, 0
-                ],
-                [
-                    1, 1, 0, 1, 1,
-                    1, 1, 0, 0, 0
-                ],
-                [
-                    1, 1, 1, 0, 1,
-                    1, 0, 0, 0, 0
-                ],
-                [
-                    1, 1, 1, 1, 0,
-                    1, 1, 0, 0, 0
-                ],
-                [
-                    1, 1, 1, 1, 1,
-                    0, 1, 0, 0, 0
-                ],
-                [
-                    1, 1, 1, 0, 1,
-                    1, 0, 1, 0, 0
-                ],
-                [
-                    0, 0, 0, 0, 0,
-                    0, 1, 0, 0, 0
-                ],
-                [
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0
-                ],
-                [
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0
-                ]
-            ]
-        }, // todo
-    },
-    {
-        input: {
-            n: 9,
-            sequence: [6, 6, 6, 6, 6, 2, 2, 1, 1], // c)
-        },
-        expectedResult: { isGraph: false }, // by algorithm
-    },
-    {
-        input: {
-            n: 9,
-            sequence: [7, 7, 5, 5, 5, 5, 2, 2, 2], // d)
-        },
-        expectedResult: {
-            isGraph: true, graph: [
-                [
-                    0, 1, 1, 1, 1,
-                    1, 1, 1, 0
-                ],
-                [
-                    1, 0, 1, 1, 1,
-                    1, 1, 1, 0
-                ],
-                [
-                    1, 1, 0, 1, 1,
-                    1, 0, 0, 0
-                ],
-                [
-                    1, 1, 1, 0, 1,
-                    1, 0, 0, 0
-                ],
-                [
-                    1, 1, 1, 1, 0,
-                    1, 0, 0, 0
-                ],
-                [
-                    1, 1, 1, 1, 1,
-                    0, 1, 0, 0
-                ],
-                [
-                    1, 1, 0, 0, 0,
-                    1, 0, 0, 0
-                ],
-                [
-                    1, 1, 0, 0, 0,
-                    0, 0, 0, 0
-                ],
-                [
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0
-                ]
-            ]
-        }, // todo
-    },
-    {
-        input: {
-            n: 9,
-            sequence: [3, 3, 3, 3, 3, 3, 3, 3, 3], // e)
-        },
-        expectedResult: { isGraph: false }, // too many 2n + 1 level degrees
-    },
-    {
-        input: {
-            n: 3,
-            sequence: [8, 8, 7, 7, 7, 7, 7, 1, 1, 1, 1], // f)
-        },
-        expectedResult: { isGraph: false }, // too many 2n + 1 level degrees
-    },
-];
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 // recursively removes the highest degree from the sequence and sorts the sequence
 const getIsGraph = (sequence: Sequence): Sequence | IsGraph => {
@@ -190,24 +26,40 @@ const getIsGraph = (sequence: Sequence): Sequence | IsGraph => {
 }
 
 const generateAdjecencyMatrix = (sequence: Sequence, vertexes: N): Matrix => {
-    let matrix: number[][] = Array(vertexes).fill(null).map(() => Array(vertexes).fill(0));
+    let matrix: number[][] = Array(vertexes).fill(0).map(() => Array(vertexes).fill(0));
+    const vertexesHeaders = ALPHABET.slice(0, vertexes).split('')
 
-    sequence.sort((a, b) => b - a);
+    for (let rowIdx = 0; rowIdx < vertexes; rowIdx++) {
+        for (let testedSequenceIdx = rowIdx; testedSequenceIdx < sequence.length; testedSequenceIdx++) {
+            for (let everyIdx = testedSequenceIdx; everyIdx < sequence.length; everyIdx++) {
+                if (testedSequenceIdx === everyIdx) {
+                    continue;
+                }
+                if (sequence[everyIdx] > sequence[testedSequenceIdx]) {
+                    const vertexOriginalIdx: number = vertexesHeaders.indexOf(vertexesHeaders[everyIdx]);
+                    const vertexTargetIdx: number = vertexesHeaders.indexOf(vertexesHeaders[testedSequenceIdx]);
 
-    while (sequence.length > 0) {
-        let maxDegree = sequence.shift();
-
-        if (maxDegree === undefined || maxDegree > sequence.length) {
-            throw new Error('Unexpected error in generateAdjecencyMatrix.');
+                    [sequence[vertexOriginalIdx], sequence[vertexTargetIdx]] = [sequence[vertexTargetIdx], sequence[vertexOriginalIdx]];
+                    [vertexesHeaders[vertexOriginalIdx], vertexesHeaders[vertexTargetIdx]] = [vertexesHeaders[vertexTargetIdx], vertexesHeaders[vertexOriginalIdx]];
+                }
+            }
         }
+        let currDegree = sequence[rowIdx];
+        // @ts-ignore
+        sequence[rowIdx] = null;
 
-        for (let i = 0; i < maxDegree; i++) {
-            matrix[vertexes - sequence.length - 1][vertexes - sequence.length + i] = 1;
-            matrix[vertexes - sequence.length + i][vertexes - sequence.length - 1] = 1;
-            sequence[i]--;
+        for (let startCellIdx = rowIdx + 1; startCellIdx < sequence.length; startCellIdx++) {
+            if (currDegree > 0) {
+                sequence[startCellIdx] -= 1;
+
+                let startRowIdx = vertexesHeaders[rowIdx].charCodeAt(0) - FIRST_LETTER.charCodeAt(0);
+                let nextCellIdx = vertexesHeaders[startCellIdx].charCodeAt(0) - FIRST_LETTER.charCodeAt(0);
+
+                matrix[startRowIdx][nextCellIdx] = 1;
+                matrix[nextCellIdx][startRowIdx] = 1;
+                currDegree -= 1;
+            }
         }
-
-        sequence.sort((a, b) => b - a);
     }
 
     const sumOfDegrees = sequence.reduce((acc, curr) => acc + curr, 0);
@@ -276,4 +128,14 @@ const runTests = (tests: Test[]) => {
 }
 
 runTests(TESTS);
-// runTests([TESTS[4]]);
+
+rl.question('Enter n (e.g. 6): ', (n) => {
+    rl.question('Enter sequence (e.g. 4,3,3,2,1,1): ', (sequence) => {
+        const userInput = { n: Number(n), sequence: sequence.split(',').map((vertex: string) => Number(vertex)) };
+        console.log('userInput:', userInput);
+        if (typeof userInput.n !== 'number' || userInput.sequence.some((num: Number) => Number.isNaN(num))) throw new Error('Invalid input. The sequence should be a numbers separated by commas.');
+        const result = checkIsGraph(userInput);
+        logResults(result);
+        rl.close();
+    });
+});

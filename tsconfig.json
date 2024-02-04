@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "es6"]
+    "module": "nodenext",
+    "lib": ["dom", "es6"],
+    "strict": false,
+    "outDir": "dist",
+    "target": "ES6",
+    "moduleResolution": "nodenext"
   }
 }

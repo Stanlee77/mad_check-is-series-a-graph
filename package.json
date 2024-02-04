@@ -1,11 +1,14 @@
 {
   "scripts": {
     "start": "node dist/programistyczne-3_zadanie-3.js",
-    "build": "npx ts",
+    "build": "npx tsc -p tsconfig.json",
     "current": "npm run build && npm run start"
   },
   "devDependencies": {
-    "ts": "^0.2.2",
+    "@types/node": "^20.11.16",
+    "ts": "^0.0.0"
+  },
+  "dependencies": {
     "typescript": "^5.3.3"
   }
 }
