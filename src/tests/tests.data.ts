@@ -1,4 +1,4 @@
-import { Test } from "./programistyczne-3_zadanie-3.types";
+import { Test } from "../programistyczne-3_zadanie-3.types";
 
 export const TESTS: Test[] = [
     {

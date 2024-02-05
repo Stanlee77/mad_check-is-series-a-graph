@@ -2,7 +2,9 @@
   "scripts": {
     "start": "node dist/programistyczne-3_zadanie-3.js",
     "build": "npx tsc -p tsconfig.json",
-    "current": "npm run build && npm run start"
+    "tests": "node dist/tests/tests.js",
+    "ctests": "npx tsc -p tsconfig.json && node dist/tests/tests.js",
+    "cstart": "npm run build && npm run start"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
